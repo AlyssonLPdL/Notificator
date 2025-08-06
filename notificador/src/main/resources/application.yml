@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/devdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    username: notificatorproject@gmail.com
+    from: notificatorproject@gmail.com
+    password: bmxinqbkfcqvknkm
+    default-encoding: UTF-8
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+      debug: true
+jwt:
+  secret: MinhaSuperChaveSecretaQueDeveSerLongaDemais1234567890
+  expirationMs: 3600000
+
+server:
+  port: 8080
