@@ -3,7 +3,7 @@
 Este projeto implementa um sistema de notificações por e-mail com fallback, pensado para garantir que mensagens críticas sejam entregues mesmo em caso de falhas temporárias.
 
  🕰️ Tempo gasto:
- 18 horas e 30 minutos
+ 18 horas e 47 minutos
 
  🚀 Funcionalidades
 
