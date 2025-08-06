@@ -17,7 +17,6 @@ public class CircuitBreakerService {
         }
 
         if (circuitoAberto && System.currentTimeMillis() - ultimaFalha >= tempoEsperaMs) {
-            // tempo de espera acabou, podemos resetar
             circuitoAberto = false;
             falhasRecentes = 0;
         }

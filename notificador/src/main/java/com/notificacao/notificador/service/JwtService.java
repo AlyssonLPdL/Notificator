@@ -24,7 +24,7 @@ public class JwtService {
     public String gerarToken(String email, Set<String> roles) {
         return Jwts.builder()
                 .setSubject(email)
-                .claim("roles", roles)  // adiciona as roles no payload
+                .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)

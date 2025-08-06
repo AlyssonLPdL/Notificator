@@ -112,7 +112,7 @@ public class NotificacaoEmailService {
         helper.setFrom(from);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(htmlBody, true);  // true = corpo em HTML
+        helper.setText(htmlBody, true);
         mailSender.send(message);
     }
 }

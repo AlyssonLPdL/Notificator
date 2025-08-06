@@ -5,7 +5,6 @@ import com.notificacao.notificador.repository.*;
 import com.notificacao.notificador.service.*;
 import jakarta.validation.Valid;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,10 +57,10 @@ public class AuthController {
             Usuario usuario = usuarioRepository.findByEmail(email)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-            // Construir resposta - agora usando diretamente o Set<String> roles
+            // Construir resposta
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("email", usuario.getEmail());
-            response.put("roles", usuario.getRoles()); // Já é uma coleção de Strings
+            response.put("roles", usuario.getRoles());
 
             return ResponseEntity.ok(response);
 
@@ -116,13 +115,11 @@ public class AuthController {
 
         Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
         if (optionalUser.isEmpty()) {
-            // Mensagem genérica por segurança
             return ResponseEntity.ok("Se o e-mail estiver cadastrado, você receberá um link de redefinição.");
         }
 
         Usuario usuario = optionalUser.get();
 
-        // Deleta token antigo, se existir
         resetTokenRepository.findByUsuario(usuario)
                 .ifPresent(resetTokenRepository::delete);
 

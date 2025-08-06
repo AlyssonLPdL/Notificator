@@ -18,8 +18,8 @@ public class EmailLog {
     private String corpo;
 
     private LocalDateTime enviadoEm;
-    private String status;      // EX: "SUC CESSO", "FALHA", "RETRY"
+    private String status;
     @Column(columnDefinition = "TEXT")
-    private String erro;        // mensagem da exceção
+    private String erro;
 
 }

@@ -25,7 +25,7 @@ public class EmailService {
             helper.setFrom(from);
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(text, isHtml); // O parâmetro crítico aqui!
+            helper.setText(text, isHtml);
 
             mailSender.send(message);
             System.out.println("✅ E-mail enviado com sucesso!");

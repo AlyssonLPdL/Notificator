@@ -40,14 +40,12 @@ public class EmailAdminController {
         try {
             notifService.enviarComLog(log.getDestinatario(), log.getAssunto(), log.getCorpo());
 
-            // Atualiza o registro
             log.setStatus("REENVIADO");
             log.setEnviadoEm(LocalDateTime.now());
             emailLogRepo.save(log);
 
             return ResponseEntity.ok("Reenvio realizado com sucesso");
         } catch (Exception e) {
-            // Atualiza com novo erro
             log.setStatus("FALHA");
             log.setErro("Falha no reenvio: " + e.getMessage());
             log.setEnviadoEm(LocalDateTime.now());
