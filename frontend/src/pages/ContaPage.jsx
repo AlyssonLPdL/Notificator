@@ -110,7 +110,6 @@ const ContaPage = () => {
                   <p className="text-blue-100">{usuario.email}</p>
                 </div>
               </div>
-
             </div>
           </div>
 

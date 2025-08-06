@@ -16,7 +16,7 @@ export default function Login() {
   const [isSending, setIsSending] = useState(false);
   const [retryTimer, setRetryTimer] = useState(0);
   const [countdownTimer, setCountdownTimer] = useState(0);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef(null);
   const navigate = useNavigate();
 
   // Timer para tentar novamente (5 segundos)
@@ -29,8 +29,8 @@ export default function Login() {
 
   // Fechar modal ao clicar fora
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
         setShowRecovery(false);
       }
     };
@@ -45,37 +45,27 @@ export default function Login() {
   }, [showRecovery]);
 
   const handleLogin = async () => {
-    setErroEmail("");
-        setErroSenha("");
+      setErroEmail("");
+      setErroSenha("");
 
-        // Validação
-          let valido = true;
-          if (!email) {
-            setErroEmail("Por favor, informe seu email");
-            valido = false;
-          } else if (!/\S+@\S+\.\S+/.test(email)) {
-            setErroEmail("Email inválido");
-            valido = false;
-          }
+      // Validação
+      let valido = true;
+      if (!email) {
+        setErroEmail("Por favor, informe seu email");
+        valido = false;
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        setErroEmail("Email inválido");
+        valido = false;
+      }
 
-          if (!senha) {
-            setErroSenha("Por favor, informe sua senha");
-            valido = false;
-          }
+      if (!senha) {
+        setErroSenha("Por favor, informe sua senha");
+        valido = false;
+      }
 
-          if (!valido) return;
+      if (!valido) return;
 
-        if (!recoveryEmail) {
-          setRecoveryMessage("Por favor, informe seu email");
-          return;
-        }
-
-    if (!email || !senha) {
-      alert("Por favor, preencha todos os campos");
-      return;
-    }
-
-    setIsLoggingIn(true);
+      setIsLoggingIn(true);
       try {
         const res = await fetch("http://localhost:8080/auth/login", {
           method: "POST",
@@ -89,52 +79,51 @@ export default function Login() {
           navigate("/conta");
         } else {
           const errorText = await res.text();
-          // Mostra erro genérico acima do formulário
-          setErroSenha(errorText);
+          setErroSenha(errorText || "Credenciais inválidas");
         }
       } catch (error) {
+        console.error("Erro no login:", error);
         setErroSenha("Erro na conexão. Tente novamente.");
       } finally {
         setIsLoggingIn(false);
       }
     };
-  };
 
   const handleForgotPassword = async () => {
-      setErroRecuperacao("");
-        setRecoveryMessage("");
+    setErroRecuperacao("");
+    setRecoveryMessage("");
 
-        if (!recoveryEmail) {
-          setErroRecuperacao("Por favor, informe seu email");
-          return;
-        } else if (!/\S+@\S+\.\S+/.test(recoveryEmail)) {
-          setErroRecuperacao("Email inválido");
-          return;
-        }
+    if (!recoveryEmail) {
+      setErroRecuperacao("Por favor, informe seu email");
+      return;
+    } else if (!/\S+@\S+\.\S+/.test(recoveryEmail)) {
+      setErroRecuperacao("Email inválido");
+      return;
+    }
 
     setIsSending(true);
     setRecoveryMessage("");
 
     try {
-        const res = await fetch("http://localhost:8080/auth/forgot-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: recoveryEmail }),
-        });
+      const res = await fetch("http://localhost:8080/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: recoveryEmail }),
+      });
 
-        const msg = await res.text();
-        setRecoveryMessage(msg);
+      const msg = await res.text();
+      setRecoveryMessage(msg);
 
-        if (res.ok) {
-          setCountdownTimer(60 * 15);
-          setRetryTimer(5);
-        }
-      } catch (error) {
-        setErroRecuperacao("Erro na conexão. Tente novamente.");
-      } finally {
-        setIsSending(false);
+      if (res.ok) {
+        setCountdownTimer(60 * 15);
+        setRetryTimer(5);
       }
-    };
+    } catch (error) {
+      setErroRecuperacao("Erro na conexão. Tente novamente.");
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const handleRetry = () => {
     if (retryTimer === 0) {
@@ -143,20 +132,20 @@ export default function Login() {
   };
 
   useEffect(() => {
-      if (countdownTimer > 0) {
-        const interval = setInterval(() => {
-          setCountdownTimer(prev => prev - 1);
-        }, 1000);
-        return () => clearInterval(interval);
-      }
-    }, [countdownTimer]);
+    if (countdownTimer > 0) {
+      const interval = setInterval(() => {
+        setCountdownTimer(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [countdownTimer]);
 
-    // Formatar para MM:SS
-    const formatTime = (seconds: number) => {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    };
+  // Formatar para MM:SS
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -175,17 +164,17 @@ export default function Login() {
                 Email
               </label>
               {erroEmail && (
-                    <span className="text-sm text-red-600 block mb-1">{erroEmail}</span>
-                  )}
+                <span className="text-sm text-red-600 block mb-1">{erroEmail}</span>
+              )}
               <input
                 id="email"
                 type="email"
                 placeholder="seu.email@exemplo.com"
                 value={email}
                 onChange={(e) => {
-                        setEmail(e.target.value);
-                        setErroEmail("");
-                      }}
+                  setEmail(e.target.value);
+                  setErroEmail("");
+                }}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </div>
@@ -203,17 +192,17 @@ export default function Login() {
                 </button>
               </div>
               {erroSenha && (
-                    <span className="text-sm text-red-600 block mb-1">{erroSenha}</span>
-                  )}
+                <span className="text-sm text-red-600 block mb-1">{erroSenha}</span>
+              )}
               <input
                 id="senha"
                 type="password"
                 placeholder="••••••••"
                 value={senha}
                 onChange={(e) => {
-                        setSenha(e.target.value);
-                        setErroSenha("");
-                      }}
+                  setSenha(e.target.value);
+                  setErroSenha("");
+                }}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </div>
@@ -263,8 +252,8 @@ export default function Login() {
               </p>
 
               {erroRecuperacao && (
-                  <span className="text-sm text-red-600 block mb-2">{erroRecuperacao}</span>
-                )}
+                <span className="text-sm text-red-600 block mb-2">{erroRecuperacao}</span>
+              )}
 
               {countdownTimer > 0 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-center">

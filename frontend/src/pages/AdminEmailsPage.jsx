@@ -1,20 +1,10 @@
 import { useEffect, useState } from 'react';
 
-const EmailLog = {
-  id: number;
-  destinatario: string;
-  assunto: string;
-  corpo: string;
-  status: string;
-  enviadoEm: string;
-  erro?: string;
-};
-
 export default function AdminEmails() {
-  const [falhas, setFalhas] = useState<EmailLog[]>([]);
+  const [falhas, setFalhas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mensagem, setMensagem] = useState('');
-  const [falhaSelecionada, setFalhaSelecionada] = useState<EmailLog | null>(null);
+  const [falhaSelecionada, setFalhaSelecionada] = useState(null);
   const [reenviando, setReenviando] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
   const [editando, setEditando] = useState(false);
@@ -68,7 +58,7 @@ export default function AdminEmails() {
     }
   };
 
-  const reenviarEmail = async (id: number) => {
+  const reenviarEmail = async (id) => {
     try {
       setReenviando(true);
       const token = localStorage.getItem('token');
@@ -105,7 +95,7 @@ export default function AdminEmails() {
     }
   };
 
-  const abrirModal = (falha: EmailLog) => {
+  const abrirModal = (falha) => {
     setFalhaSelecionada(falha);
     setModalAberto(true);
     setEditando(false);
@@ -117,7 +107,7 @@ export default function AdminEmails() {
     setEditando(false);
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case 'falha': return 'bg-red-100 text-red-800';
       case 'pendente': return 'bg-yellow-100 text-yellow-800';
@@ -127,7 +117,7 @@ export default function AdminEmails() {
     }
   };
 
-  const formatarData = (dataString: string) => {
+  const formatarData = (dataString) => {
     if (!dataString) return 'Sem data';
 
     const data = new Date(dataString);
@@ -179,10 +169,7 @@ export default function AdminEmails() {
     ? Math.round((emailsEnviados / totalEmails) * 100)
     : 0;
 
-  const handleCampoEditavelChange = (
-    campo: keyof EmailLog,
-    valor: string
-  ) => {
+  const handleCampoEditavelChange = (campo, valor) => {
     if (!falhaSelecionada) return;
 
     setFalhaSelecionada({

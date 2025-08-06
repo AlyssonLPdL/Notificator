@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
 
         // Redirecionar para login após 3 segundos
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 3000);
       } else {
         setMessage({ text: "Erro: " + txt, type: "error" });

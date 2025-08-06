@@ -135,7 +135,7 @@ public class AuthController {
         resetTokenRepository.save(resetToken);
 
         String link = "http://localhost:5173/reset-password?token=" + token;
-        String assunto = "Redefinição de Senha - SeuApp";
+        String assunto = "Redefinição de Senha - Notificator";
         String mensagemHTML = emailTemplateService.buildPasswordResetEmail(link);
 
         notificacaoEmailService.enviarComLog(email, assunto, mensagemHTML);
